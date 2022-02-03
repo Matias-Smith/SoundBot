@@ -1,12 +1,8 @@
-/* DriverLib Includes */
+
 #include "driverlib.h"
-/* Standard Includes */
 #include <stdint.h>
 #include "../inc/SysTick.h"
 #include "../inc/Clock.h"
-
-
-/////////////You will define variables here//////////////////
 
 //Iterators
 uint32_t Size;
@@ -64,8 +60,6 @@ uint8_t MODE;
 #define SAMPLING_MODE    1
 #define RUNNING_MODE     2
 
-/////////////////////////////////////////////////////////////
-
 #define PERIOD   100
 
 /* Timer_A UpMode Configuration Parameter */
@@ -117,9 +111,6 @@ Timer_A_CompareModeConfig compareConfig_PWM4 =
         DUTY_CYCLE2
 };
 
-/////////////////////////////////////////////////////////////
-
-
 void TimerA2_Init(void);
 void PWM_Init12(void);
 void PWM_Init12(void);
@@ -132,9 +123,6 @@ void motor_left(uint16_t leftDuty, uint16_t rightDuty);
 void motor_backward(uint16_t leftDuty, uint16_t rightDuty);
 void motor_stop(void);
 void ADC_Ch14Ch15_Init(void);
-
-
-//////////////////////// MAIN FUNCTION /////////////////////////////////////
 
 int main(void)
 {
@@ -192,10 +180,6 @@ int main(void)
 
 }
 
-
-//////////////////////// FUNCTIONs /////////////////////////////////////
-
-
 void TA2_0_IRQHandler(void)
 {
     GPIO_toggleOutputOnPin(GPIO_PORT_P6, GPIO_PIN4);
@@ -220,9 +204,9 @@ void TA2_0_IRQHandler(void)
                MODE= RUNNING_MODE;
 
 
-//////////// MAKE DIRECTION DECISION BASED SAMPLING RESULTS HERE ///////////////////////
+            /* MAKE DIRECTION DECISION BASED SAMPLING RESULTS HERE */
 
-//// STEP 1:   Design digital filters for ADC data://////
+               /* Digital filters for ADC data */
 
                for (c = 0; c < 1000; c++) {
                    x1[c] = Real_INPUT_P6_0[c];
@@ -242,7 +226,7 @@ void TA2_0_IRQHandler(void)
 
                }
 
-//// STEP 2:   Lines 246-268: Compute Amplitude of the Waves
+               /* Lines 246-268: Compute Amplitude of the Waves */
                avgAmplitude1=0.0;
                avgAmplitude2=0.0;
 
@@ -267,8 +251,7 @@ void TA2_0_IRQHandler(void)
                avgAmpOverWave1 = avgAmplitude1/10;
                avgAmpOverWave2 = avgAmplitude2/10;
 
-
-//// STEP 3: //Line 273: Check if there is a significant sound
+             //Line 273: Check if there is a significant sound
              //Lines 273-347: Determining Direction if there is Sound
                if(avgAmpOverWave1 > 0.5 | avgAmpOverWave2 > 0.5)
                {
@@ -417,10 +400,6 @@ void TA2_0_IRQHandler(void)
      //Clear Interrupt to Start Cycle Again
      Timer_A_clearCaptureCompareInterrupt(TIMER_A2_BASE,TIMER_A_CAPTURECOMPARE_REGISTER_0);
 }
-
-
-////////////////////////////////////////////////////////////////////////////////////
-
 
 void TimerA2_Init(void){
 /* Configuring Timer_A1 for Up Mode */
